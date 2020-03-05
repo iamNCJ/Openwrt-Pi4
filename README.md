@@ -1,5 +1,11 @@
 # OpenWrt Pi 4B
 
+## Usage
+
+Go to [Release](https://github.com/iamNCJ/Openwrt-Pi4/releases) to download images and flash into a sd card.
+
+> Note: You'd better resize your rootfs to make full use of your sd card.
+
 ## Features
 
 - Thx to [P3TERX's repo](https://github.com/P3TERX/Actions-OpenWrt)
@@ -30,4 +36,4 @@
 
 ## License
 
-[MIT](https://github.com/iamNCJ/openwrt-pi4/blob/master/LICENSE) © NCJ
+[MIT](https://github.com/iamNCJ/Openwrt-Pi4/blob/master/LICENSE) © NCJ
