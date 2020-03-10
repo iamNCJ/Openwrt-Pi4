@@ -1,5 +1,7 @@
 # OpenWrt Pi 4B
 
+![Build OpenWrt](https://github.com/iamNCJ/Openwrt-Pi4/workflows/Build%20OpenWrt/badge.svg?branch=master)
+
 ## Usage
 
 Go to [Release](https://github.com/iamNCJ/Openwrt-Pi4/releases) to download images and flash into a sd card.
