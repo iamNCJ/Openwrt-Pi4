@@ -121,10 +121,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     steps:
-    - name: Download firmware directory
-        uses: actions/download-artifact@v1
-        with:
-          name: OpenWrt_firmware
+    - name: Download Firmware Directory
+      uses: actions/download-artifact@v1
+      with:
+        name: OpenWrt_firmware
 
     - name: Create Release
       id: create_release
