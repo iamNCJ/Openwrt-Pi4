@@ -15,6 +15,7 @@ on:
     branches:
       - master
       - dev
+      - actions-dev
     paths:
       - '.config'
 #  schedule:
