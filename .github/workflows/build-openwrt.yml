@@ -35,6 +35,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
+    - name: Compile the firmware
+      id: compile
+      run: |
+        cd ${{ env.FIRMWARE }}
+        touch test
+
     - name: Upload firmware directory
       uses: actions/upload-artifact@master
       with:
