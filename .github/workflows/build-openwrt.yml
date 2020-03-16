@@ -34,6 +34,7 @@ env:
 
 jobs:
   build:
+    name: Build Image
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
 
@@ -113,6 +114,17 @@ jobs:
       with:
         name: OpenWrt_firmware
         path: ${{ env.FIRMWARE }}
+
+  create-release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+    - name: Download firmware directory
+        uses: actions/download-artifact@v1
+        with:
+          name: OpenWrt_firmware
 
     - name: Create Release
       id: create_release
