@@ -38,14 +38,15 @@ jobs:
     - name: Compile the firmware
       id: compile
       run: |
-        cd ${{ env.FIRMWARE }}
+        mkdir temp
+        cd temp
         touch test
 
     - name: Upload firmware directory
       uses: actions/upload-artifact@master
       with:
         name: OpenWrt_firmware
-        path: ${{ env.FIRMWARE }}
+        path: temp
 
   create-release:
     name: Create Release
