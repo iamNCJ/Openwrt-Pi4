@@ -20,9 +20,10 @@ env:
   REPO_BRANCH: master
   CONFIG_FILE: .config
   DIY_SH: diy.sh
-  SSH_ACTIONS: true
+  SSH_ACTIONS: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
+  CREATE_RELEASE: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -79,4 +80,4 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: OpenWrt_firmware/test.zip
         asset_name: test.zip
-        asset_content_type: application/zip
+        # asset_content_type: application/zip
