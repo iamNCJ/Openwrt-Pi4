@@ -30,11 +30,8 @@ jobs:
   build:
     name: Build Image
     runs-on: ubuntu-latest
-    if: |
-      false
-      && github.event.repository.owner.id == github.event.sender.id
+    if: github.event.repository.owner.id == github.event.sender.id
     
-
     steps:
     - name: Checkout
       uses: actions/checkout@master
@@ -57,6 +54,9 @@ jobs:
     name: Create Release
     needs: build
     runs-on: ubuntu-latest
+    if: |
+      false
+      && github.event.repository.owner.id == github.event.sender.id
     steps:
     - name: Checkout
       uses: actions/checkout@v2
