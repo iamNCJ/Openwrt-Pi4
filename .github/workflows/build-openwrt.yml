@@ -23,71 +23,106 @@ env:
   SSH_ACTIONS: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
-  CREATE_RELEASE: true
   TZ: Asia/Shanghai
 
 jobs:
   build:
-    name: Build Image
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
-    
+
     steps:
     - name: Checkout
       uses: actions/checkout@master
 
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo swapoff /swapfile
+        sudo rm -rf /swapfile /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+
+    - name: Clone source code
+      run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+
+    - name: Update feeds
+      run: cd openwrt && ./scripts/feeds update -a
+
+    - name: Install feeds
+      run: cd openwrt && ./scripts/feeds install -a
+
+    - name: Load custom configuration
+      run: |
+        [ -e files ] && mv files openwrt/files
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        chmod +x $DIY_SH
+        cd openwrt
+        ../$DIY_SH
+
+    - name: SSH connection to Actions
+      uses: P3TERX/debugger-action@master
+      if: env.SSH_ACTIONS == 'true'
+
+    - name: Download package
+      id: package
+      run: |
+        cd openwrt
+        make defconfig
+        make download -j8
+        find dl -size -1024c -exec ls -l {} \;
+        find dl -size -1024c -exec rm -f {} \;
+
     - name: Compile the firmware
       id: compile
       run: |
-        mkdir temp
-        cd temp
-        echo  ${{ github.sha }} > test.csv
-        echo  ${{ github.sha }} > test1.csv
+        cd openwrt
+        echo -e "$(nproc) thread compile"
+        make -j$(nproc) || make -j1 V=s
+        echo "::set-output name=status::success"
+
+    - name: Upload bin directory
+      uses: actions/upload-artifact@master
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+      with:
+        name: OpenWrt_directory
+        path: openwrt/bin
+
+    - name: Organize files
+      id: organize
+      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      run: |
+        cd openwrt/bin/targets/*/*
+        rm -rf packages
+        echo "::set-env name=FIRMWARE::$PWD"
+        echo "::set-output name=status::success"
 
     - name: Upload firmware directory
       uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: OpenWrt_firmware
-        path: temp
+        path: ${{ env.FIRMWARE }}
 
   create-release:
     name: Create Release
     needs: build
     runs-on: ubuntu-latest
     if: |
-      false
+      true
       && github.event.repository.owner.id == github.event.sender.id
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Generate Changelog
-      run: echo "# Good things have arrived" > CHANGELOG.txt
-
-    - name: Read CHANGELOG
-      id: changelog
-      run: |
-        echo "::set-output name=body::$(cat CHANGELOG.txt)"
-
     - name: Download Firmware Directory
       uses: actions/download-artifact@v1
       with:
         name: OpenWrt_firmware
 
-    # - name: GH Release
-    #   uses: softprops/action-gh-release@v0.1.5
-    #   with:
-    #     body_path: ${{ github.workflow }}-CHANGELOG.txt
-    #     files: |
-    #       test.csv
-    #       test1.csv
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #     input_tag_name: ${{ github.ref }}
-    #     github_ref: refs/tags/233
-
-
-
+    - name: Read Checksum
+      id: checksum
+      run: |
+        echo "::set-output name=body::$(cat OpenWrt_firmware/sha256sums)"
 
     - name: Create Release
       id: create_release
@@ -97,7 +132,7 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.sha }}
-        body: ${{ steps.changelog.outputs.body }}
+        body: ${{ steps.checksum.outputs.body }}
         draft: true
         prerelease: true
 
@@ -108,9 +143,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: OpenWrt_firmware/test.csv
-        asset_name: test.csv
-        asset_content_type: text/csv # application/zip
+        asset_path: OpenWrt_firmware/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img.gz
+        asset_name: openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img.gz
+        asset_content_type: application/gzip
 
     - name: Upload Release Asset2
       id: upload-release-asset2 
@@ -119,6 +154,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: OpenWrt_firmware/test1.csv
-        asset_name: test1.csv
-        asset_content_type: text/csv # application/zip
+        asset_path: OpenWrt_firmware/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img.gz
+        asset_name: openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img.gz
+        asset_content_type: application/gzip
