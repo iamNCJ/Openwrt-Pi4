@@ -54,7 +54,6 @@ jobs:
     name: Create Release
     needs: build
     runs-on: ubuntu-latest
-    if: github.event.repository.owner.id == github.event.sender.id && env.CREATE_RELEASE == 'true'
     steps:
     - name: Checkout
       uses: actions/checkout@v2
