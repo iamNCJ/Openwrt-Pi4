@@ -73,9 +73,9 @@ jobs:
         files: |
           test.csv
           test1.csv
-        tag_name: ${{ github.ref }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        input_tag_name: ${{ github.ref }}
 
 
 
