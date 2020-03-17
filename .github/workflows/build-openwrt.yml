@@ -74,6 +74,7 @@ jobs:
         files: |
           test.csv
           test1.csv
+        tag_name: Build ${{ github.sha }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
