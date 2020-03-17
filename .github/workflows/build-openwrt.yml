@@ -42,6 +42,7 @@ jobs:
         mkdir temp
         cd temp
         echo  ${{ github.sha }} > test.csv
+        echo  ${{ github.sha }} > test1.csv
 
     - name: Upload firmware directory
       uses: actions/upload-artifact@master
@@ -55,29 +56,48 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Generate Changelog
+      run: echo "# Good things have arrived" > ${{ github.workflow }}-CHANGELOG.txt
+
     - name: Download Firmware Directory
       uses: actions/download-artifact@v1
       with:
         name: OpenWrt_firmware
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: GH Release
+      uses: softprops/action-gh-release@v0.1.5
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.sha }}
-        draft: true
-        prerelease: true
+        body_path: ${{ github.workflow }}-CHANGELOG.txt
+        files: |
+          test.csv
+          test1.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload Release Asset
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: OpenWrt_firmware/test.csv
-        asset_name: test.csv
-        asset_content_type: text/csv # application/zip
+
+
+
+    # - name: Create Release
+    #   id: create_release
+    #   uses: actions/create-release@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     tag_name: ${{ github.ref }}
+    #     release_name: Release ${{ github.sha }}
+    #     draft: true
+    #     prerelease: true
+
+    # - name: Upload Release Asset
+    #   id: upload-release-asset 
+    #   uses: actions/upload-release-asset@v1.0.2
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+    #     asset_path: OpenWrt_firmware/test.csv
+    #     asset_name: test.csv
+    #     asset_content_type: text/csv # application/zip
