@@ -59,24 +59,29 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Generate Changelog
-      run: echo "# Good things have arrived" > ${{ github.workflow }}-CHANGELOG.txt
+      run: echo "# Good things have arrived" > CHANGELOG.txt
+
+    - name: Read CHANGELOG
+      id: changelog
+      run: |
+        echo "::set-output name=body::$(cat CHANGELOG.txt)"
 
     - name: Download Firmware Directory
       uses: actions/download-artifact@v1
       with:
         name: OpenWrt_firmware
 
-    - name: GH Release
-      uses: softprops/action-gh-release@v0.1.5
-      with:
-        body_path: ${{ github.workflow }}-CHANGELOG.txt
-        files: |
-          test.csv
-          test1.csv
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        input_tag_name: ${{ github.ref }}
-        github_ref: refs/tags/233
+    # - name: GH Release
+    #   uses: softprops/action-gh-release@v0.1.5
+    #   with:
+    #     body_path: ${{ github.workflow }}-CHANGELOG.txt
+    #     files: |
+    #       test.csv
+    #       test1.csv
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     input_tag_name: ${{ github.ref }}
+    #     github_ref: refs/tags/233
 
 
 
@@ -89,7 +94,7 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.sha }}
-        body: ${cat{${{ github.workflow }}-CHANGELOG.txt}}
+        body: ${{ steps.changelog.outputs.body }}
         draft: true
         prerelease: true
 
