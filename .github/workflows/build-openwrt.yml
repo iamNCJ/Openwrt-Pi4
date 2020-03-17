@@ -76,6 +76,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         input_tag_name: ${{ github.ref }}
+        github_ref: refs/tags/233
 
 
 
