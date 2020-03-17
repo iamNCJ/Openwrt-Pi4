@@ -19,7 +19,6 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   CONFIG_FILE: .config
-  DIY_SH: diy.sh
   SSH_ACTIONS: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
@@ -58,9 +57,6 @@ jobs:
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        chmod +x $DIY_SH
-        cd openwrt
-        ../$DIY_SH
 
     - name: SSH connection to Actions
       uses: P3TERX/debugger-action@master
@@ -136,6 +132,17 @@ jobs:
         draft: true
         prerelease: true
 
+    - name: Upload Release Asset0
+      id: upload-release-asset0
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: OpenWrt_firmware/config.seed
+        asset_name: config.seed
+        asset_content_type: text
+
     - name: Upload Release Asset1
       id: upload-release-asset1 
       uses: actions/upload-release-asset@v1.0.2
@@ -143,8 +150,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: OpenWrt_firmware/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img.gz
-        asset_name: openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img.gz
+        asset_path: OpenWrt_firmware/openwrt-bcm27xx-bcm2711-rpi-4-ext4-factory.img.gz
+        asset_name: openwrt-rpi-4-ext4-factory.img.gz
         asset_content_type: application/gzip
 
     - name: Upload Release Asset2
@@ -154,6 +161,29 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: OpenWrt_firmware/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img.gz
-        asset_name: openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img.gz
+        asset_path: OpenWrt_firmware/openwrt-bcm27xx-bcm2711-rpi-4-ext4-sysupgrade.img.gz
+        asset_name: openwrt-rpi-4-ext4-sysupgrade.img.gz
         asset_content_type: application/gzip
+
+    - name: Upload Release Asset3
+      id: upload-release-asset3
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: OpenWrt_firmware/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img.gz
+        asset_name: openwrt-rpi-4-squashfs-factory.img.gz
+        asset_content_type: application/gzip
+
+    - name: Upload Release Asset4
+      id: upload-release-asset4
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: OpenWrt_firmware/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img.gz
+        asset_name: openwrt-rpi-4-squashfs-sysupgrade.img.gz
+        asset_content_type: application/gzip
+        
