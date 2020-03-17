@@ -41,7 +41,7 @@ jobs:
       run: |
         mkdir temp
         cd temp
-        touch test.csv
+        echo  ${{ github.sha }} > test.csv
 
     - name: Upload firmware directory
       uses: actions/upload-artifact@master
