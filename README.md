@@ -1,6 +1,6 @@
 # OpenWrt for Pi 4B
 
-[![Stars](https://img.shields.io/github/stars/iamNCJ/Openwrt-Pi4.svg?label=Stars&style=social)](https://github.com/iamNCJ/Openwrt-Pi4/stargazers) [![Forks](https://img.shields.io/github/forks/iamNCJ/Openwrt-Pi4.svg?label=Fork&style=social)](https://github.com/iamNCJ/Openwrt-Pi4/network/members) ![Build OpenWrt](https://github.com/iamNCJ/Openwrt-Pi4/workflows/Build%20OpenWrt/badge.svg?branch=master)
+[![Stars](https://img.shields.io/github/stars/iamNCJ/Openwrt-Pi4.svg?label=Stars&style=social)](https://github.com/iamNCJ/Openwrt-Pi4/stargazers) [![Forks](https://img.shields.io/github/forks/iamNCJ/Openwrt-Pi4.svg?label=Fork&style=social)](https://github.com/iamNCJ/Openwrt-Pi4/network/members)
 
 # 使用方法
 
@@ -10,9 +10,9 @@
 
 - 针对树莓派4进行性能调优
 - 精简系统，极致性能
-- 虚拟化支持 (Docker & LXC)
+- 虚拟化支持 (Docker)
 - L2TP VPN拨号支持
-- MJPG-Streamer v4l2相机支持
+- DoH支持
 - SS obfs插件支持
 
 ---
