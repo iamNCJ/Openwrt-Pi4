@@ -14,6 +14,7 @@
 - L2TP VPN拨号支持
 - DoH支持
 - SS obfs插件支持
+- 无线热点已经正常
 
 ---
 
@@ -25,22 +26,16 @@ Go to [Release](https://github.com/iamNCJ/Openwrt-Pi4/releases) to download imag
 
 ## Features
 
-- Thx to [P3TERX's repo](https://github.com/P3TERX/Actions-OpenWrt)
-- Built using GitHub Actions
 - Tuned for Better Performance on Raspberry Pi 4
 - Simplified System
 - Added Support for L2TP
-- Enabled Virtulization Support for LXC & Docker
-- Enabled MJPG-Streamer with v4l2 usb cameras
+- Enabled Virtulization Support for Docker
 - Enabled obfs Plugin for SS
-
-## Known Issue
-
-- Wireless AP not functioning, probably due to upper source's problem
+- Support DNS over HTTPS
+- Wireless Hotspot Working
 
 ## Acknowledgments
 
-- [P3TERX](https://github.com/P3TERX)
 - [Microsoft](https://www.microsoft.com)
 - [Microsoft Azure](https://azure.microsoft.com)
 - [GitHub](https://github.com)
