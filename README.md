@@ -1,3 +1,5 @@
+***Archived since I'm no longer using Pi4 as my router***
+
 # OpenWrt for Pi 4B
 
 [![Stars](https://img.shields.io/github/stars/iamNCJ/Openwrt-Pi4.svg?label=Stars&style=social)](https://github.com/iamNCJ/Openwrt-Pi4/stargazers) [![Forks](https://img.shields.io/github/forks/iamNCJ/Openwrt-Pi4.svg?label=Fork&style=social)](https://github.com/iamNCJ/Openwrt-Pi4/network/members)
