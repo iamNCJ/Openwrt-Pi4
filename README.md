@@ -1,5 +1,7 @@
 ***Archived since I'm no longer using Pi4 as my router***
 
+> ***See [Openwrt-NanoPi-R2S](https://github.com/iamNCJ/Openwrt-NanoPi-R2S) as i'm using it myself now***
+
 # OpenWrt for Pi 4B
 
 [![Stars](https://img.shields.io/github/stars/iamNCJ/Openwrt-Pi4.svg?label=Stars&style=social)](https://github.com/iamNCJ/Openwrt-Pi4/stargazers) [![Forks](https://img.shields.io/github/forks/iamNCJ/Openwrt-Pi4.svg?label=Fork&style=social)](https://github.com/iamNCJ/Openwrt-Pi4/network/members)
@@ -35,19 +37,6 @@ Go to [Release](https://github.com/iamNCJ/Openwrt-Pi4/releases) to download imag
 - Enabled obfs Plugin for SS
 - Support DNS over HTTPS
 - Wireless Hotspot Working
-
-## Acknowledgments
-
-- [Microsoft](https://www.microsoft.com)
-- [Microsoft Azure](https://azure.microsoft.com)
-- [GitHub](https://github.com)
-- [GitHub Actions](https://github.com/features/actions)
-- [tmate](https://github.com/tmate-io/tmate)
-- [mxschmitt/action-tmate](https://github.com/mxschmitt/action-tmate)
-- [csexton/debugger-action](https://github.com/csexton/debugger-action)
-- [Cisco](https://www.cisco.com/)
-- [OpenWrt](https://github.com/openwrt/openwrt)
-- [Lean's OpenWrt](https://github.com/coolsnowwolf/lede)
 
 ## License
 
